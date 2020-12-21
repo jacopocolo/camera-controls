@@ -50,6 +50,7 @@ var ACTION;
     ACTION[ACTION["TOUCH_DOLLY_OFFSET"] = 12] = "TOUCH_DOLLY_OFFSET";
     ACTION[ACTION["TOUCH_ZOOM_TRUCK"] = 13] = "TOUCH_ZOOM_TRUCK";
     ACTION[ACTION["TOUCH_ZOOM_OFFSET"] = 14] = "TOUCH_ZOOM_OFFSET";
+    ACTION[ACTION["TOUCH_ZOOM_ROTATE"] = 15] = "TOUCH_ZOOM_ROTATE";
 })(ACTION || (ACTION = {}));
 
 var PI_2 = Math.PI * 2;
@@ -489,6 +490,17 @@ var CameraControls = (function (_super) {
                             _this._state === ACTION.TOUCH_ZOOM_OFFSET) {
                             truckInternal_1(deltaX, deltaY, true);
                         }
+                        break;
+                    }
+                    case ACTION.TOUCH_ZOOM_ROTATE: {
+                        var touchEvent = event;
+                        rotateInternal_1(deltaX, deltaY);
+                        var dx = _v2.x - touchEvent.touches[1].clientX;
+                        var dy = _v2.y - touchEvent.touches[1].clientY;
+                        var distance = Math.sqrt(dx * dx + dy * dy);
+                        var dollyDelta = dollyStart_1.y - distance;
+                        dollyStart_1.set(0, distance);
+                        zoomInternal_1(dollyDelta * TOUCH_DOLLY_FACTOR);
                         break;
                     }
                     case ACTION.TRUCK:
